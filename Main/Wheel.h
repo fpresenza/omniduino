@@ -7,7 +7,6 @@ class Wheel {
   private:
     byte             ID; 
     byte             ENABLE, IN_1, IN_2;
-
     
   public:
     float            VelErrorInt;
