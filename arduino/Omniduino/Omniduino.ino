@@ -44,7 +44,9 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(Wheel[2].A), UpdateEncoder2, RISING); // run UpdateEncoder2() when Wheel[2].A rises from LOW to HIGH
 
   // WAIT UNTIL OMNIWHEEL IS INITIALIZED //
+  
   while (!Omni.Initialized()) {
+    //Serial1.println("Inicializando...");
     delay(SETUP_DELAY);
   }
   
@@ -53,13 +55,21 @@ void setup() {
 }
 
 void loop() {
+
+
   // OMNIWHEEL PART - POSITION SENSORING AND CONTROL// 
   Omni.timesec = 0.001 * (float)millis(); // Get current time in seconds;
-  Omni.Read_PosRef(); // Read Omni's X, Y, YAW references from Serial port 1.
-  Omni.Read_IndoorGPS(); // Read position of hedgehog from Indoor GPS service;
-  Omni.Read_Mag_HMC5883(); // Read Earth's magnetic field vector from Magnetometer.
-  Omni.Get_Coordinates(); // Estimate Omni's X, Y, YAW coordinates from values read;
-  Omni.Pos_Ctrl(); // Implement Position Control Action = Obtain required Omni velocities;
+  Omni.Read_Ref(); // Read Serial 1 port for position reference or commanded velocity.
+  //Omni.Read_IndoorGPS(); // Read position of hedgehog from Indoor GPS service;
+  //Omni.Read_Mag_HMC5883(); // Read Earth's magnetic field vector from Magnetometer.
+  //Omni.Get_Coordinates(); // Estimate Omni's X, Y, YAW coordinates from values read;
+  
+  if (Omni.OP_MODE == "position") { 
+    Omni.Pos_Ctrl(); // Implement Position Control Action = Obtain required Omni velocities;
+  }
+  else if (Omni.OP_MODE == "velocity") { 
+    Omni.Get_Cmd_Vel();
+  }
 
   // KINEMATIC TRANSFORMATION MATRIX //
   KinematicTransf(); // Convert required Omni's velocities to wheel velocities.
@@ -73,11 +83,15 @@ void loop() {
   Wheel[1].Drive();
   Wheel[2].Drive();
 
+  Serial1.println("prueba");
   // SERIAL PRINT //
+  /*
   Serial1.print(Omni.timesec,3); Serial1.print(",");
   Serial1.print(Omni.pX,3); Serial1.print(",");
   Serial1.print(Omni.pY,3); Serial1.print(",");
   Serial1.println(Omni.Yaw * 180/PI,3);
+  */
+
 
   // DELAY //
   delay(LOOP_DELAY);

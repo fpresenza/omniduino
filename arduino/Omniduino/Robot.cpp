@@ -6,61 +6,140 @@
 
 Robot::Robot() { // Initialize Omni variables;
   vX = vY = vYaw = 0;
-  Init_Ref = false;
+  Init_Pos_Ref = false;
+  Init_Cmd_Vel = false;
 }
 
 bool Robot::Initialized() { // Wait until Serial Port 1, IndoorGPS and Magnetometer data are ready //
 
-  Read_PosRef(); // Read Omni's X, Y, YAW references from Serial port 1.
-  Read_IndoorGPS(); // Read position of hedgehog from Indoor GPS service;
-  Read_Mag_HMC5883(); // Read Earth's magnetic field vector from Magnetometer.
-  if (Init_Ref && IndoorGPS.Updated && Mag.Updated) return true;
+  Read_Ref(); // Read Serial 1 port for position reference or commanded velocity.
+  Read_IndoorGPS(); // Read position of hedgehog from Indoor GPS service if available;
+  Read_Mag_HMC5883(); // Read Earth's magnetic field vector from Magnetometer if available.
+
+  //Read_Cmd_Vel(); // Read Commanded Velocity from Joystick if avaible.
+
+  //Serial1.println(Init_Cmd_Vel);
+  
+  if (Init_Pos_Ref && IndoorGPS.Updated && Mag.Updated) {
+    OP_MODE = "position";
+    return true;
+  }
+  else if (Init_Cmd_Vel) { // && IndoorGPS.Updated
+    OP_MODE = "velocity";
+    return true;
+  }
   else return false;
 }
 
-void Robot::Read_PosRef() { // Read last position reference in Serial 1 buffer
+void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
 
   float incoming_ref[3] = {0, 0, 0};
-  new_pos_ref[0] = new_pos_ref[1] = new_pos_ref[2] = false;
+  new_ref[0] = new_ref[1] = new_ref[2] = false;
   static bool ref_data_available[3] = {false, false, false};
   bool terminate = false;
+  //char header;
+  String header, str, data;
+  int len, len_stamp;
 
   while (Serial1.available() > 0) {
-    if (Serial1.read() != 'p') {
+    
+    str = Serial1.readStringUntil('\n');
+
+    len = str.length();
+    //Serial1.println(len);
+    
+    if (len < 2) break;
+
+    if (str.startsWith("pxyw")) {
+    
+      data = str.substring(4);
+
+      len_stamp = data.toInt();
+
+      if (len != len_stamp) break;
+
+      //Serial1.println("length match");
+  
+      data = data.substring(3);
+            
+      //Serial1.println(data);
+
+      float x = data.toFloat();
+      Serial1.println(x);
+      
+      int comma = data.indexOf(',');
+      //Serial1.println(comma);
+      //if (comma <0) break;
+      data = data.substring(comma+1);
+      //Serial1.println(data);
+      float y = data.toFloat();
+      Serial1.println(y);
+
+      comma = data.indexOf(',');
+      //if (comma <0) break;
+      data = data.substring(comma+1);
+      float yaw = data.toFloat();
+      Serial1.println(yaw);
+
+      
+    }
+    
+    else if (str.startsWith("vxyw")) {
+      
+      data = str.substring(4);
+      Serial1.println(data);
+    }
+  }
+  
+/*
+  while (Serial1.available() > 0) {
+    
+    header = Serial1.read();
+    Serial1.println(header);
+    
+    if (header != 'p' && header != 'v') {
       while (Serial1.available() > 0 && Serial1.read() != '\n') {};
       continue;
     }
+    
     do {
-      char id_char = Serial1.read();
-      switch (id_char) {
+      char id = Serial1.read();
+      Serial1.println(id);
+      switch (id) {
         case ('z'):
-          new_pos_ref[0] = true;
-          new_pos_ref[1] = true;
-          new_pos_ref[2] = true;
+          new_ref[0] = true;
+          new_ref[1] = true;
+          new_ref[2] = true;
           break;
         case ('x'):
           incoming_ref[0] = Serial1.parseFloat();
-          new_pos_ref[0] = true;
+          new_ref[0] = true;
           break;
         case ('y'):
           incoming_ref[1] = Serial1.parseFloat();
-          new_pos_ref[1] = true;
+          new_ref[1] = true;
           break;
         case ('w'):
           incoming_ref[2] = Serial1.parseFloat();
-          new_pos_ref[2] = true;
+          new_ref[2] = true;
           break;
         case ('r'):
-          if (new_pos_ref[0]) {
-            pXRef = incoming_ref[0];
+          if (new_ref[0]) {
+            if (header == 'p')  pXRef = incoming_ref[0];
+            else if (header == 'v') Cmd_Vel_X = incoming_ref[0];
+            
             if (!ref_data_available[0]) ref_data_available[0] = true;
           }
-          if (new_pos_ref[1]) {
-            pYRef = incoming_ref[1];
+          if (new_ref[1]) {
+            if (header == 'p')  pYRef = incoming_ref[1];
+            else if (header == 'v') Cmd_Vel_Y = incoming_ref[1];
+            
             if (!ref_data_available[1]) ref_data_available[1] = true;
           }
-          if (new_pos_ref[2]) {
-            YawRef = incoming_ref[2] * PI / 180;
+          if (new_ref[2]) {
+            if (header == 'p')  YawRef = incoming_ref[2] * PI/180;
+            else if (header == 'v')  Cmd_Vel_Yaw = incoming_ref[2];
+            
             if (!ref_data_available[2]) ref_data_available[2] = true;
           }
         default:
@@ -69,7 +148,11 @@ void Robot::Read_PosRef() { // Read last position reference in Serial 1 buffer
       }
     } while (!terminate);
   }
-  if (!Init_Ref && ref_data_available[0] && ref_data_available[1] && ref_data_available[2]) Init_Ref = true;
+  
+  if (header == 'p' && !Init_Pos_Ref && ref_data_available[0] && ref_data_available[1] && ref_data_available[2]) Init_Pos_Ref = true;
+
+  else if (header == 'v' && !Init_Cmd_Vel && ref_data_available[0] && ref_data_available[1] && ref_data_available[2]) Init_Cmd_Vel = true;
+*/
 }
 
 void Robot::Get_Coordinates() {
@@ -148,11 +231,11 @@ void Robot::Pos_Ctrl() {
   pY_preError = pY_Error;
 
   // ACCEPTANCE ZONE //
-#define XLim   0.05 // Limits of acceptance zone;
-#define YLim   0.05
-#define YawLim 0.15
+  const float XLim   =  0.05; // Limits of acceptance zone;
+  const float YLim   = 0.05;
+  const float YawLim = 0.15;
 
-  if (!new_pos_ref[0] && (abs(pX_Error) < XLim) && (abs(pY_Error) < YLim) && (abs(Yaw_Error) < YawLim)) {
+  if (!new_pos_ref && (abs(pX_Error) < XLim) && (abs(pY_Error) < YLim) && (abs(Yaw_Error) < YawLim)) {
     pX_Error = 0;
     pX_ErrorInt = 0;
     pX_ErrorDer = 0;
@@ -177,4 +260,16 @@ void Robot::Pos_Ctrl() {
   vX = cos(Yaw) * vX_global + sin(Yaw) * vY_global;
   vY = - sin(Yaw) * vX_global + cos(Yaw) * vY_global;
   vYaw = vYaw_global;
+}
+
+void Robot::Get_Cmd_Vel() {
+
+  const float vel_x_max = 0.3; // 
+  const float vel_y_max = 0.3;
+  const float vel_yaw_max = 2.5;
+
+  vX = vel_x_max * Cmd_Vel_X;
+  vY = vel_y_max * Cmd_Vel_Y;
+  vYaw = vel_yaw_max * Cmd_Vel_Yaw;
+  
 }
