@@ -1,0 +1,7 @@
+<launch>
+
+  <!-- lanza el nodo joy_serial -->
+  <node pkg="joy_serial" name="joy_serial" type="joy_serial.py" output="screen">
+  </node>
+
+</launch>

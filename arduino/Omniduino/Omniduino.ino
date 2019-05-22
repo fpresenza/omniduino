@@ -1,10 +1,9 @@
-//                                    //
-////////     VERSION 3.3.2      /////////
-//                                    //
-//            STABLE PID              //
-//         POSITION, ANGLE &	      //
-// 	  TRAJECTORY  CONTROL         //
-////////////////////////////////////////
+/* 
+ *  
+  Created on Tue May 21 11:52:24 2019
+  @author: fpresenza 
+ *  
+ */
 
 #include "Main.h"
 #include "Robot.h"
@@ -20,6 +19,7 @@ Wheel Wheel[3] {
 };
 
 void setup() {
+  
   Omni.Setup_IndoorGPS(); // INITIALIZE MARVELMIND INDOOR GPS //   
   Omni.Setup_Mag_HMC5883(); // INITIALIZE ADAFRUIT HMC5883 MAGNETOMETER // 
 
@@ -46,7 +46,7 @@ void setup() {
   // WAIT UNTIL OMNIWHEEL IS INITIALIZED //
   
   while (!Omni.Initialized()) {
-    //Serial1.println("Inicializando...");
+    Serial1.println("Inicializando...");
     delay(SETUP_DELAY);
   }
   
@@ -56,20 +56,24 @@ void setup() {
 
 void loop() {
 
-
   // OMNIWHEEL PART - POSITION SENSORING AND CONTROL// 
   Omni.timesec = 0.001 * (float)millis(); // Get current time in seconds;
   Omni.Read_Ref(); // Read Serial 1 port for position reference or commanded velocity.
-  //Omni.Read_IndoorGPS(); // Read position of hedgehog from Indoor GPS service;
-  //Omni.Read_Mag_HMC5883(); // Read Earth's magnetic field vector from Magnetometer.
-  //Omni.Get_Coordinates(); // Estimate Omni's X, Y, YAW coordinates from values read;
+  Omni.Read_IndoorGPS(); // Read position of hedgehog from Indoor GPS service;
+  Omni.Read_Mag_HMC5883(); // Read Earth's magnetic field vector from Magnetometer.
+  Omni.Get_Coordinates(); // Estimate Omni's X, Y, YAW coordinates from values read;
+
   
   if (Omni.OP_MODE == "position") { 
-    Omni.Pos_Ctrl(); // Implement Position Control Action = Obtain required Omni velocities;
+    Omni.Pos_Ctrl(); // Implement Position Control Action = Obtain required Omni velocities;    
   }
   else if (Omni.OP_MODE == "velocity") { 
     Omni.Get_Cmd_Vel();
   }
+
+  /*Serial1.println(Omni.vX);
+  Serial1.println(Omni.vY);
+  Serial1.println(Omni.vYaw);*/
 
   // KINEMATIC TRANSFORMATION MATRIX //
   KinematicTransf(); // Convert required Omni's velocities to wheel velocities.
@@ -83,7 +87,7 @@ void loop() {
   Wheel[1].Drive();
   Wheel[2].Drive();
 
-  Serial1.println("prueba");
+  //Serial1.println(Omni.OP_MODE);
   // SERIAL PRINT //
   /*
   Serial1.print(Omni.timesec,3); Serial1.print(",");
