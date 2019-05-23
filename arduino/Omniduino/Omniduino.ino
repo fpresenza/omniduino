@@ -87,9 +87,11 @@ void loop() {
   //Serial1.println(Omni.OP_MODE);
   // SERIAL PRINT //
 
+  
+
   //String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.pX, 3) + "," + String(Omni.pY, 3) + "," + String(Omni.Yaw, 3);
-  String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.vX, 3) + "," + String(Omni.vY, 3) + "," + String(Omni.vYaw, 3);
-  Serial1.println(data);
+  //String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.vX, 3) + "," + String(Omni.vY, 3) + "," + String(Omni.vYaw, 3);
+  //Serial1.println(data);
   //Serial1.print(Omni.timesec, 3); Serial1.print(",");
   //Serial1.print(Omni.pX, 3); Serial1.print(",");
   //Serial1.print(Omni.pY, 3); Serial1.print(",");
