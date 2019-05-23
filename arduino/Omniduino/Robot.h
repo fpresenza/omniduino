@@ -15,9 +15,13 @@ class Robot {
   public:
     float             timesec; // Store current time in [s].
     const float       D = 0.116; // distance between centroid and wheel center.
-    float             pX, pY, Yaw;
+    float             pX = 0;
+    float             pY = 0;
+    float             Yaw = 0;
     float             pXRef, pYRef, YawRef;
-    float             Cmd_Vel_X, Cmd_Vel_Y, Cmd_Vel_Yaw;
+    float             Cmd_Vel_X = 0;
+    float             Cmd_Vel_Y = 0;
+    float             Cmd_Vel_Yaw = 0;
     float             vX, vY, vYaw;
     bool              new_ref[3];
     bool              new_pos_ref;
