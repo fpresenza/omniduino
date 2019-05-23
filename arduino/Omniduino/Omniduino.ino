@@ -46,7 +46,7 @@ void setup() {
   // WAIT UNTIL OMNIWHEEL IS INITIALIZED //
   
   while (!Omni.Initialized()) {
-    Serial1.println("Inicializando...");
+    //Serial1.println("Inicializando...");
     delay(SETUP_DELAY);
   }
   
@@ -71,10 +71,6 @@ void loop() {
     Omni.Get_Cmd_Vel();
   }
 
-  /*Serial1.println(Omni.vX);
-  Serial1.println(Omni.vY);
-  Serial1.println(Omni.vYaw);*/
-
   // KINEMATIC TRANSFORMATION MATRIX //
   KinematicTransf(); // Convert required Omni's velocities to wheel velocities.
   
@@ -87,14 +83,18 @@ void loop() {
   Wheel[1].Drive();
   Wheel[2].Drive();
 
+  
   //Serial1.println(Omni.OP_MODE);
   // SERIAL PRINT //
-  /*
-  Serial1.print(Omni.timesec,3); Serial1.print(",");
-  Serial1.print(Omni.pX,3); Serial1.print(",");
-  Serial1.print(Omni.pY,3); Serial1.print(",");
-  Serial1.println(Omni.Yaw * 180/PI,3);
-  */
+
+  //String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.pX, 3) + "," + String(Omni.pY, 3) + "," + String(Omni.Yaw, 3);
+  String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.vX, 3) + "," + String(Omni.vY, 3) + "," + String(Omni.vYaw, 3);
+  Serial1.println(data);
+  //Serial1.print(Omni.timesec, 3); Serial1.print(",");
+  //Serial1.print(Omni.pX, 3); Serial1.print(",");
+  //Serial1.print(Omni.pY, 3); Serial1.print(",");
+  //Serial1.println(Omni.Yaw, 3);
+  
 
 
   // DELAY //

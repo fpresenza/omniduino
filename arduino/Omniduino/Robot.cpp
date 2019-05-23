@@ -18,13 +18,15 @@ bool Robot::Initialized() { // Wait until Serial Port 1, IndoorGPS and Magnetome
 
   //Read_Cmd_Vel(); // Read Commanded Velocity from Joystick if avaible.
 
-  //Serial1.println(Init_Cmd_Vel);
+  //Serial1.println(IndoorGPS.Updated);
 
   if (Init_Pos_Ref and IndoorGPS.Updated and Mag.Updated) {
     OP_MODE = "position";
     return true;
   }
-  else if (Init_Cmd_Vel) { // and IndoorGPS.Updated
+  else if (Init_Cmd_Vel) { // and IndoorGPS.Updated) {
+
+    
     OP_MODE = "velocity";
     return true;
   }
@@ -40,11 +42,9 @@ void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
   while (Serial1.available() > 0) {
 
     str = Serial1.readStringUntil('\n');
-    Serial1.println(str);
 
     header = str[0];
     if (header != 'r')  break;
-    //if (str.length() != 16)  break;
 
     id = str[1];
     if (id != 'p' and id != 'v') break;
@@ -52,17 +52,14 @@ void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
     data = str.substring(2);
 
     x = data.toFloat();
-    //Serial1.println(x);
 
     int comma = data.indexOf(',');
     data = data.substring(comma + 1);
     y = data.toFloat();
-    //Serial1.println(y);
 
     comma = data.indexOf(',');
     data = data.substring(comma + 1);
     yaw = data.toFloat();
-    //Serial1.println(yaw);
 
     if (id == 'p') {
 
@@ -72,6 +69,7 @@ void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
       YawRef = yaw;
       if (!Init_Pos_Ref)  Init_Pos_Ref = true;
     }
+    
     else if (id == 'v') {
       
       if (OP_MODE == "position")  break;
@@ -86,6 +84,8 @@ void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
 
 void Robot::Get_Coordinates() {
 
+  //Serial1.println(IndoorGPS.Updated);
+
   const float d[2] = {0.06, 0.03}; // X, Y distance from hedgehog to center of robot;
 
   const float c[3] = {13.81, 15.59, -40.91}; // Center correction of magnetometer values;
@@ -99,6 +99,7 @@ void Robot::Get_Coordinates() {
   static int lap = 0;
 
   if (Mag.Updated) {
+    
     float mX = Mag.Raw_X - c[0]; // X correction in center of Mag;
     float mY = Mag.Raw_Y - c[1]; // Y correction in center of Mag;
     float mZ = Mag.Raw_Z - c[2]; // Z correction in center of Mag;
@@ -117,9 +118,11 @@ void Robot::Get_Coordinates() {
     Mag.Updated = false; // CLEAR MAGNETOMETER UPDATE FLAG //
     preAngle = AngleRead;
   }
+  
   if (IndoorGPS.Updated) {
-    pX = IndoorGPS.Raw_X + d[0] * cos(Yaw) - d[1] * sin(Yaw); // Correction in center of hedgehog;
-    pY = IndoorGPS.Raw_Y + d[0] * sin(Yaw) + d[1] * cos(Yaw);
+    
+    pX = IndoorGPS.Raw_X; //+ d[0] * cos(Yaw) - d[1] * sin(Yaw); // Correction in center of hedgehog;
+    pY = IndoorGPS.Raw_Y; //+ d[0] * sin(Yaw) + d[1] * cos(Yaw);
     IndoorGPS.Updated = false; // CLEAR HEDGEHOG POSITION UPDATE FLAG //
   }
 }
