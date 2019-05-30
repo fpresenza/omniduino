@@ -14,6 +14,7 @@ class Wheel {
     byte             A, B;
     const float      R = 0.024; // wheel radius in meters (24 mm).
     float            Vel, VelRef;
+    int              enc_count = 0;
     
     Wheel(byte, byte, byte, byte, byte, byte);
     void Set_PWM();
