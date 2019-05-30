@@ -198,7 +198,7 @@ void Robot::Get_Cmd_Vel() {
 
   const float vel_x_max = 0.3; //
   const float vel_y_max = 0.3;
-  const float vel_yaw_max = 2.5;
+  const float vel_yaw_max = 2;
 
   vX = vel_x_max * Cmd_Vel_X;
   vY = vel_y_max * Cmd_Vel_Y;

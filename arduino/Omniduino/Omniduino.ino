@@ -95,16 +95,6 @@ void loop() {
   Serial1.print(Wheel[0].enc_count); Serial1.print(',');
   Serial1.print(Wheel[1].enc_count); Serial1.print(',');
   Serial1.print(Wheel[2].enc_count); Serial1.print('\n');
-  
-
-  //String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.pX, 3) + "," + String(Omni.pY, 3) + "," + String(Omni.Yaw, 3);
-  //String data = "ap" + String(Omni.timesec, 3) + "," + String(Omni.vX, 3) + "," + String(Omni.vY, 3) + "," + String(Omni.vYaw, 3);
-  //Serial1.println(data);
-  //Serial1.print(Omni.timesec, 3); Serial1.print(",");
-  //Serial1.print(Omni.pX, 3); Serial1.print(",");
-  //Serial1.print(Omni.pY, 3); Serial1.print(",");
-  //Serial1.println(Omni.Yaw, 3);
-  
 
 
   // DELAY //
