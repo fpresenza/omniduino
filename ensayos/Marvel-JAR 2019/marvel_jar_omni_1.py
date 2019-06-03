@@ -1,48 +1,16 @@
+#!/usr/bin/env python
+
+import sys
+sys.path.append("/home/fran/Repository/python_scripts/")
+
 import time
 import os
 import matplotlib.pyplot as plt
 import matplotlib.axes as axs
 import numpy as np
-import sys
 from math import *
 from pyquaternion import Quaternion
-
-class DataFile: # Clase para guardar los datos leídos
-
-    def __init__(self, data_path):
-        self.path = data_path
-
-    def read(self, start_line=0, end_line=10000):
-
-        with open(self.path, 'r+') as f:
-            
-            for i in range(start_line + 1):
-                line = f.readline()
-
-            try:
-                elements = line[:-1].split(",")
-                p = [[] for elem in elements]
-
-            except:
-                elements = ['info']
-                p = [[]]
- 
-            for _ in range(end_line - start_line):
-
-                line = f.readline()
-                if line == '':
-                    break
-
-                values = line[:-1].split(",")
-
-                for i in range(len(elements)):
-                    try:
-                        p[i].append(float(values[i]))
-                    except:
-                        p[i].append(str(values[i]))
-
-
-        return np.array(p)
+from DataFile import DataFile
 
 
 class DataSource: 
@@ -102,12 +70,15 @@ if __name__ == '__main__':
     """ Read data """
 
     """ Marvelmind """
-    t, x, y, yaw, n1, n2, n3 = DataFile(marvel_omni_path).read()
 
-    marvel.omni.t = t - t[0]
-    marvel.omni.x = x
-    marvel.omni.y = y
-    marvel.omni.yaw = yaw
+    data = DataFile(marvel_omni_path).read()
+
+    t0 = data[0][0]
+
+    marvel.omni.t = np.array(data[0]) - t0
+    marvel.omni.x = np.array(data[1])
+    marvel.omni.y = np.array(data[2])
+    marvel.omni.yaw = np.array(data[3])
 
     raw_t = [val for val in marvel.omni.t]
     raw_x = [val for val in marvel.omni.x]
@@ -115,9 +86,8 @@ if __name__ == '__main__':
 
     """ OptiTrack """
 
-    opti.info =  DataFile(opti_path).read(2, 6)
-    
-    data =  DataFile(opti_path).read(6)
+    opti.info =  DataFile(opti_path).read(2, 6) 
+    data =  DataFile(opti_path).read(7)
 
     xi = 306
     yi = 304
@@ -134,16 +104,16 @@ if __name__ == '__main__':
     #print(data[yi][1])
     #print(data[yi][2])
 
-    opti.omni.t = float(data[1][0]) - 25
-    opti.omni.x = float(data[xi][0])
-    opti.omni.y = float(data[yi][0])
+    opti.omni.t = data[1][0] - 25
+    opti.omni.x = data[xi][0]
+    opti.omni.y = data[yi][0]
 
     q = Quaternion()
 
-    q[1] = float(data[qi][0])
-    q[2] = float(data[qi+1][0])
-    q[3] = float(data[qi+2][0])
-    q[0] = float(data[qi+3][0])
+    q[1] = data[qi][0]
+    q[2] = data[qi+1][0]
+    q[3] = data[qi+2][0]
+    q[0] = data[qi+3][0]
 
     y, p, r = euler_angles(q)
 
@@ -152,14 +122,14 @@ if __name__ == '__main__':
     for i in range(1, len(data[0])):
 
         if (data[xi][i] != '') and (data[yi][i] != ''):
-            opti.omni.t = np.append(opti.omni.t, float(data[1][i])  - 25)
-            opti.omni.x = np.append(opti.omni.x, float(data[xi][i]))
-            opti.omni.y = np.append(opti.omni.y, float(data[yi][i]))
+            opti.omni.t = np.append(opti.omni.t, data[1][i] - 25)
+            opti.omni.x = np.append(opti.omni.x, data[xi][i])
+            opti.omni.y = np.append(opti.omni.y, data[yi][i])
 
-            q[1] = float(data[qi][i])
-            q[2] = float(data[qi+1][i])
-            q[3] = float(data[qi+2][i])
-            q[0] = float(data[qi+3][i])
+            q[1] = data[qi][i]
+            q[2] = data[qi+1][i]
+            q[3] = data[qi+2][i]
+            q[0] = data[qi+3][i]
 
             y, p, r = euler_angles(q)
 
@@ -251,9 +221,6 @@ if __name__ == '__main__':
 
     marvel.omni.offset = (t2[0] + t2[1] - t1[0] - t1[1]) / 2
     marvel.omni.t += marvel.omni.offset 
-
-    #opti.omni.offset = -25
-    #opti.omni.t += opti.omni.offset
 
 
     """ Plot data """

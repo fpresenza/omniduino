@@ -55,21 +55,26 @@ if __name__ == '__main__':
     try:
 
         marvel_omni_file = str(sys.argv[1])
-        opti_file = str(sys.argv[2])
+        marvel_hexa_file = str(sys.argv[2])
+        opti_file = str(sys.argv[3])
 
     except:
 
-        marvel_omni_file = "omni_20190524_16:35:09.txt"
-        opti_file = "Omni_solo_2-2019-05-24 03.49.21 PM_002.csv"
+        marvel_omni_file = "omni_20190524_16:47:37.txt"
+        marvel_hexa_file = "hexa_omni_2.csv"
+        opti_file = "Hexa_Omni-2-2019-05-24 03.49.21 PM_005.csv"
 
 
     marvel_omni_path = os.path.join(current_path, marvel_omni_file)
+    marvel_hexa_path = os.path.join(current_path, marvel_hexa_file)
     opti_path = os.path.join(current_path, opti_file)
 
 
     """ Read data """
 
     """ Marvelmind """
+
+    """ Omni """
 
     data = DataFile(marvel_omni_path).read()
 
@@ -83,6 +88,11 @@ if __name__ == '__main__':
     raw_t = [val for val in marvel.omni.t]
     raw_x = [val for val in marvel.omni.x]
     raw_y = [val for val in marvel.omni.y]
+
+    """ Hexa """
+
+
+    
 
     """ OptiTrack """
 
@@ -145,7 +155,7 @@ if __name__ == '__main__':
 
     for i in range(len(marvel.omni.t)):
 
-        if (marvel.omni.t[i] > 50.0 and marvel.omni.t[i] < 55.0):
+        if (marvel.omni.t[i] > 0 and marvel.omni.t[i] < 4.0):
 
             count1 += 1
 
@@ -157,7 +167,7 @@ if __name__ == '__main__':
 
     for i in range(len(opti.omni.t)):
 
-        if (opti.omni.t[i] > 50.0 and opti.omni.t[i] < 55.0):
+        if (opti.omni.t[i] > 0 and opti.omni.t[i] < 4.0):
 
             count2 += 1
 
@@ -186,9 +196,9 @@ if __name__ == '__main__':
         
     """ offset correction """
     marvel.omni.max_x = max(marvel.omni.x)
-    marvel.omni.max_y = max(marvel.omni.y)
+    # marvel.omni.max_y = max(marvel.omni.y)
     opti.omni.max_x = max(opti.omni.x)
-    opti.omni.max_y = max(opti.omni.y)
+    # opti.omni.max_y = max(opti.omni.y)
     t1 = np.zeros(2)
     t2 = np.zeros(2)
     found = [False, False, False, False]
@@ -200,10 +210,10 @@ if __name__ == '__main__':
             t1[0] = marvel.omni.t[i]
             found[0] = True
         
-        if (marvel.omni.y[i] == marvel.omni.max_y and not found[1]):
+        # if (marvel.omni.y[i] == marvel.omni.max_y and not found[1]):
 
-            t1[1] = marvel.omni.t[i]
-            found[1] = True
+        #     t1[1] = marvel.omni.t[i]
+        #     found[1] = True
 
 
     for i in range(len(opti.omni.t)):
@@ -213,13 +223,13 @@ if __name__ == '__main__':
             t2[0] = opti.omni.t[i]
             found[2] = True
 
-        if (opti.omni.y[i] == opti.omni.max_y and not found[3]):
+        # if (opti.omni.y[i] == opti.omni.max_y and not found[3]):
 
-            t2[1] = opti.omni.t[i]
-            found[3] = True
+        #     t2[1] = opti.omni.t[i]
+        #     found[3] = True
 
 
-    marvel.omni.offset = (t2[0] + t2[1] - t1[0] - t1[1]) / 2
+    marvel.omni.offset = (t2[0] - t1[0])
     marvel.omni.t += marvel.omni.offset 
 
 
