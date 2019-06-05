@@ -12,14 +12,14 @@ void Robot::Setup_IndoorGPS() {
 
 void Robot::Read_IndoorGPS() {
   
-  long hedgehog_x, hedgehog_y;// coordinates of hedgehog (X,Y,Z) in mm.
+  long hedgehog_x, hedgehog_y, hedgehog_yaw;// coordinates of hedgehog (X,Y,Z) in mm.
   int toMeters_factor;
   int incoming_byte;
   int total_received_in_loop = 0;
   int packet_received = 0;
   bool good_byte;
   byte packet_size;
-  uni_8x2_16 un16;
+  uni_8x2_16 un16, an16;
   uni_8x4_32 un32;
   
   while(Serial2.available() > 0) {
@@ -127,6 +127,11 @@ void Robot::Read_IndoorGPS() {
           un32.b[2]= hedgehog_serial_buf[15];
           un32.b[3]= hedgehog_serial_buf[16];
           hedgehog_y= un32.vi32;
+
+          an16.b[0] = hedgehog_serial_buf[23];
+          an16.b[1] = hedgehog_serial_buf[24];
+          hedgehog_yaw = long(an16.wi);
+
           break;
         }
       }
@@ -138,7 +143,9 @@ void Robot::Read_IndoorGPS() {
         IndoorGPS.Updated = true;// flag of new data from hedgehog received   
       }
 
-    } 
+      IndoorGPS.Raw_Yaw = (float)(hedgehog_yaw)/10;     
+      
+    }
   }
 }
 

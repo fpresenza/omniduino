@@ -59,8 +59,8 @@ if __name__ == '__main__':
 
     except:
 
-        marvel_omni_file = "omni_20190524_16:35:09.txt"
-        opti_file = "Omni_solo_2-2019-05-24 03.49.21 PM_002.csv"
+        marvel_omni_file = "../omni_20190524_16:35:09.txt"
+        opti_file = "../Omni_solo_2-2019-05-24 03.49.21 PM_002.csv"
 
 
     marvel_omni_path = os.path.join(current_path, marvel_omni_file)

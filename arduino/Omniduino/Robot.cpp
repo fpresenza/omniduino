@@ -123,6 +123,8 @@ void Robot::Get_Coordinates() {
     
     pX = IndoorGPS.Raw_X; //+ d[0] * cos(Yaw) - d[1] * sin(Yaw); // Correction in center of hedgehog;
     pY = IndoorGPS.Raw_Y; //+ d[0] * sin(Yaw) + d[1] * cos(Yaw);
+    Marvel_Yaw = IndoorGPS.Raw_Yaw;
+    
     IndoorGPS.Updated = false; // CLEAR HEDGEHOG POSITION UPDATE FLAG //
   }
 }

@@ -92,10 +92,11 @@ void loop() {
   Serial1.print(Omni.pX, 3); Serial1.print(',');
   Serial1.print(Omni.pY, 3); Serial1.print(',');
   Serial1.print(Omni.Yaw, 3); Serial1.print(',');
+  Serial1.print(Omni.Marvel_Yaw, 3); Serial1.print(',');
   Serial1.print(Wheel[0].enc_count); Serial1.print(',');
   Serial1.print(Wheel[1].enc_count); Serial1.print(',');
   Serial1.print(Wheel[2].enc_count); Serial1.print('\n');
-
+  
 
   // DELAY //
   delay(LOOP_DELAY);

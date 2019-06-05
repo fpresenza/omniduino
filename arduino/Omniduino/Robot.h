@@ -8,7 +8,7 @@ class Robot {
     bool              Init_Pos_Ref;
     bool              Init_Cmd_Vel;
     struct sensor_data {
-        float         Raw_X, Raw_Y, Raw_Z;
+        float         Raw_X, Raw_Y, Raw_Z, Raw_Yaw;
         bool          Updated; // flag of new data received
     } IndoorGPS, Mag;
     
@@ -18,6 +18,7 @@ class Robot {
     float             pX = 0;
     float             pY = 0;
     float             Yaw = 0;
+    float             Marvel_Yaw = 0;
     float             pXRef, pYRef, YawRef;
     float             Cmd_Vel_X = 0;
     float             Cmd_Vel_Y = 0;

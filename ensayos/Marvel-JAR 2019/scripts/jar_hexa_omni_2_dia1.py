@@ -60,9 +60,9 @@ if __name__ == '__main__':
 
     except:
 
-        marvel_omni_file = "omni_20190524_15:52:30.txt"
-        marvel_hexa_file = "hexa_omni_1.csv"
-        opti_file = "Hexa-Omin-1-2019-05-24 03.49.21 PM_001.csv"
+        marvel_omni_file = "../omni_20190524_16:47:37.txt"
+        marvel_hexa_file = "../hexa_omni_2.csv"
+        opti_file = "../Hexa_Omni-2-2019-05-24 03.49.21 PM_005.csv"
 
 
     marvel_omni_path = os.path.join(current_path, marvel_omni_file)
@@ -155,7 +155,7 @@ if __name__ == '__main__':
 
     for i in range(len(marvel.omni.t)):
 
-        if (marvel.omni.t[i] > 0 and marvel.omni.t[i] < 2.0):
+        if (marvel.omni.t[i] > 0 and marvel.omni.t[i] < 4.0):
 
             count1 += 1
 
@@ -167,7 +167,7 @@ if __name__ == '__main__':
 
     for i in range(len(opti.omni.t)):
 
-        if (opti.omni.t[i] > 0 and opti.omni.t[i] < 2.0):
+        if (opti.omni.t[i] > 0 and opti.omni.t[i] < 4.0):
 
             count2 += 1
 
