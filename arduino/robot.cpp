@@ -21,13 +21,13 @@ bool Robot::Initialized() { // Wait until Serial Port 1, IndoorGPS and Magnetome
   //Serial1.println(IndoorGPS.Updated);
 
   if (Init_Pos_Ref and IndoorGPS.Updated and Mag.Updated) {
-    OP_MODE = "position";
+
+    OP_MODE = 0x00;
     return true;
   }
   else if (Init_Cmd_Vel) { // and IndoorGPS.Updated) {
 
-    
-    OP_MODE = "velocity";
+    OP_MODE = 0xff;
     return true;
   }
   else return false;
@@ -63,7 +63,7 @@ void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
 
     if (id == 'p') {
 
-      if (OP_MODE == "velocity")  break; 
+      if (OP_MODE == 0xff)  break; 
       pXRef = x;
       pYRef = y;
       YawRef = yaw;
@@ -72,7 +72,7 @@ void Robot::Read_Ref() { // Read last position reference in Serial 1 buffer
     
     else if (id == 'v') {
       
-      if (OP_MODE == "position")  break;
+      if (OP_MODE == 0x00)  break;
       Cmd_Vel_X = x;
       Cmd_Vel_Y = y;
       Cmd_Vel_Yaw = yaw;

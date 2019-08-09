@@ -64,10 +64,10 @@ void loop() {
   Omni.Get_Coordinates(); // Estimate Omni's X, Y, YAW coordinates from values read;
 
   
-  if (Omni.OP_MODE == "position") { 
+  if (Omni.OP_MODE == 0x00) { 
     Omni.Pos_Ctrl(); // Implement Position Control Action = Obtain required Omni velocities;    
   }
-  else if (Omni.OP_MODE == "velocity") { 
+  else if (Omni.OP_MODE == 0xff) { 
     Omni.Get_Cmd_Vel();
   }
 
