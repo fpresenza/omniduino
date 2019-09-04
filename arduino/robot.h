@@ -26,7 +26,7 @@ class Robot {
     float             vX, vY, vYaw;
     bool              new_ref[3];
     bool              new_pos_ref;
-    byte               OP_MODE;
+    byte              OP_MODE;
 
     Robot(); // default constructor.
     bool Initialized();
