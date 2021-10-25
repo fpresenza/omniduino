@@ -1,0 +1,39 @@
+# pins del omniduino en Arduino Due
+Wheel 1:
+  pwm: 
+    ENABLE: 2
+    IN_1: 22
+    IN_2: 23
+  encoder:
+    A: 48
+    B: 49
+
+Wheel 2:
+  pwm: 
+    ENABLE: 3
+    IN_1: 24
+    IN_2: 25
+  encoder:
+    A: 50
+    B: 51
+
+Wheel 3:
+  pwm: 
+    ENABLE: 4
+    IN_1: 26
+    IN_2: 27
+  encoder:
+    A: 52
+    B: 53
+
+Serial: 
+  RX: 0
+  TX: 1
+
+Serial 1:  # comunicacion con pc/comando
+  RX: 19
+  TX: 18
+
+Serial 2:  # comunicacion con indoor gps
+  RX: 17
+  TX: 16
