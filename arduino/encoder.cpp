@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include "Encoder.h"
-#include "Wheel.h"
+#include "encoder.h"
+#include "wheel.h"
 
 void Wheel::Set_Encoder() {
   pinMode(A, INPUT); // Set Encoders pins as inputs;

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include "Main.h"
-#include "Wheel.h"
+#include "main.h"
+#include "wheel.h"
 
 Wheel::Wheel(byte i, byte a, byte b, byte c, byte d, byte e) { // Initialize Wheel variables;
   ID = i;

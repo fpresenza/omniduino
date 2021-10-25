@@ -28,8 +28,8 @@
 
 #include <limits.h>
 
-#include "HMC5883_U.h"
-#include "Robot.h"
+#include "hmc5883_u.h"
+#include "robot.h"
 
 static float _hmc5883_Gauss_LSB_XY = 1100.0F;  // Varies with gain
 static float _hmc5883_Gauss_LSB_Z  = 980.0F;   // Varies with gain

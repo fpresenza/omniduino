@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include "IndoorGPS.h"
-#include "Robot.h"
+#include "indoorgps.h"
+#include "robot.h"
 
 void Robot::Setup_IndoorGPS() {  
   Serial2.begin(115200, SERIAL_8N1);

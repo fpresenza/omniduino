@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Arduino.h>
-#include "Main.h"
-#include "Robot.h"
+#include "main.h"
+#include "robot.h"
 
 Robot::Robot() { // Initialize Omni variables;
   vX = vY = vYaw = 0;

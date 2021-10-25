@@ -5,9 +5,9 @@
  *  
  */
 
-#include "Main.h"
-#include "Robot.h"
-#include "Wheel.h"
+#include "main.h"
+#include "robot.h"
+#include "wheel.h"
 
 // CREATE OBJETS //
 Robot Omni;
