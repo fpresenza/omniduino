@@ -12,10 +12,11 @@
 // CREATE OBJETS //
 Robot Omni;
 
+// Initialize Wheel 0 ID & Pin Numbers; 
 Wheel Wheel[3] {
-  {0, 2, 22, 23, 48, 49},  // Initialize Wheel 0 ID & Pin Numbers; 
-  {1, 3, 24, 25, 50, 51},  // Initialize Wheel 1 ID & Pin Numbers; 
-  {2, 4, 26, 27, 52, 53}   // Initialize Wheel 2 ID & Pin Numbers;
+  {0, 2, 22, 23, 48, 49},  // {ID, ENABLE, IN_1, IN_2, A, B}
+  {1, 3, 24, 25, 50, 51},
+  {2, 4, 26, 27, 52, 53}
 };
 
 void setup() {

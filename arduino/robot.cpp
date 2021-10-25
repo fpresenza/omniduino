@@ -206,4 +206,9 @@ void Robot::Get_Cmd_Vel() {
   vY = vel_y_max * Cmd_Vel_Y;
   vYaw = vel_yaw_max * Cmd_Vel_Yaw;
 
+//  // GLOBAL FRAME TO OMNI's FRAME CONVERTION //
+//  vX = cos(Yaw) * vX + sin(Yaw) * vY;
+//  vY = - sin(Yaw) * vX + cos(Yaw) * vY;
+//  vYaw = vYaw_global;
+
 }
